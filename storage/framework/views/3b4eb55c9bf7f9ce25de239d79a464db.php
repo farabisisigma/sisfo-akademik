@@ -1,0 +1,71 @@
+<?php $__env->startSection('title', 'Data Siswa'); ?>
+
+<?php $__env->startSection('content'); ?>
+    <div class="container-fluid">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Data Siswa</h1>
+        <a href="<?php echo e(route('siswa.create')); ?>" class="btn btn-primary btn-sm shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Tambah Siswa</a>
+    </div>
+
+    <?php if(session('success')): ?>
+        <div class="alert alert-success"><?php echo e(session('success')); ?></div>
+    <?php endif; ?>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Daftar Siswa Terdaftar</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead class="bg-primary text-white">
+                        <tr>
+                            <th>No</th>
+                            <th>NIS</th>
+                            <th>Nama Siswa</th>
+                            <th>Jenis Kelamin</th>
+                            <th>Kelas</th>
+                            <th>No HP</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $__currentLoopData = $siswas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <tr>
+                            <td><?php echo e($index + 1); ?></td>
+                            <td><?php echo e($s->nis); ?></td>
+                            <td><?php echo e($s->nama); ?></td>
+                            <td>
+                                <span class="badge <?php echo e($s->jenis_kelamin == 'L' ? 'badge-primary' : 'badge-danger'); ?>">
+                                    <?php echo e($s->jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan'); ?>
+
+                                </span>
+                            </td>
+                            <td><?php echo e($s->kelas->nama_kelas ?? '-'); ?></td>
+                            <td><?php echo e($s->no_hp); ?></td>
+                            <td>
+                                <a href="<?php echo e(route('siswa.show', $s->id)); ?>" class="btn btn-info btn-sm" title="Detail">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="<?php echo e(route('siswa.edit', $s->id)); ?>" class="btn btn-warning btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="<?php echo e(route('siswa.destroy', $s->id)); ?>" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('DELETE'); ?>
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Hapus">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.main', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\sisfoxirpl1\resources\views/siswa/index.blade.php ENDPATH**/ ?>
